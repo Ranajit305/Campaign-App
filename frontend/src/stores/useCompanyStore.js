@@ -2,18 +2,17 @@ import { create } from 'zustand';
 import { axiosUrl } from '../utils/axios'
 
 const useCompanyStore = create((set) => ({
-    company: null,
+    company: {},
     error: null,
     loading: false,
 
     checkCompany: async () => {
         set({loading: true})
         try {
-            set({ loading: true, error: null });
             const response = await axiosUrl.get('/company/auth');
             set({ company: response.data });
         } catch (error) {
-            set({ error: error.response?.data?.message || 'Failed to check authentication', loading: false });
+            set({ error: error.response?.data?.message });
         } finally {
             set({loading: false})
         }
