@@ -26,6 +26,10 @@ app.use('/api/campaign', campaignRouter);
 app.use('/api/referral', referralRouter);
 app.use('/api/ai', aiRouter);
 
+app.get('/', (req, res) => {
+    res.send('API Working');
+})
+
 app.listen((PORT), () => {
     connectDB();
     console.log('Server is Listening to PORT:', PORT);
