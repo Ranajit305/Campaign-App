@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { axiosUrl } from '../utils/axios'
+import toast from 'react-hot-toast';
 
 const useCompanyStore = create((set) => ({
     company: null,
@@ -24,7 +25,9 @@ const useCompanyStore = create((set) => ({
             set({ loading: true, error: null });
             const response = await axiosUrl.post('/company/login', { email, password });
             set({ company: response.data.company });
+            toast.success(response.data.message);
         } catch (error) {
+            toast.error(error.response.data.message);
             set({ error: error.response?.data?.message || 'Login failed', loading: false });
         } finally {
             set({ loading: false })
@@ -40,7 +43,9 @@ const useCompanyStore = create((set) => ({
                 password,
             });
             set({ company: response.data.company, loading: false });
+            toast.success(response.data.message);
         } catch (error) {
+            toast.error(error.response.data.message);
             set({ error: error.response?.data?.message || 'Signup failed', loading: false });
         } finally {
             set({ loading: false })
@@ -51,6 +56,7 @@ const useCompanyStore = create((set) => ({
         try {
             await axiosUrl.post('/company/logout');
             set({ company: null });
+            toast.success('Logged Out Successfully')
         } catch (error) {
             set({ error: error.response?.data?.message || 'Logout failed', loading: false });
         }
