@@ -21,9 +21,9 @@ const App = () => {
   const { newCampaign } = useCampaignStore();
   const { mail } = useCustomerStore();
 
-  // useEffect(() => {
-  //   checkCompany();
-  // }, [])
+  useEffect(() => {
+    checkCompany();
+  }, [])
 
   return (
     <div className={`${company && 'md:flex'} `}>
