@@ -38,6 +38,7 @@ const Customers = () => {
                     <div>
                         <h1 className="text-2xl font-bold text-indigo-600">Customers</h1>
                         <p className="text-gray-500">Manage your customer base efficiently.</p>
+                        <p className="text-gray-500">Customers with 10+ referrals are loyal</p>
                     </div>
                     <div className='flex items-center gap-2'>
                         <button
