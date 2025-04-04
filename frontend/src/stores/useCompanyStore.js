@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { axiosUrl } from '../utils/axios'
 
 const useCompanyStore = create((set) => ({
-    company: {},
+    company: null,
     error: null,
     loading: false,
 
