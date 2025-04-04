@@ -27,10 +27,7 @@ const App = () => {
 
   return (
     <div className={`${company && 'md:flex'} `}>
-      {company && <Sidebar />}
-      {company && <AgentAI />}
-      {newCampaign && <CreateCampaign />}
-      {mail && <Email />}
+      
       <Routes>
         <Route path='/' element={!company ? <Login /> : <Navigate to='/dashboard'/>} />
         <Route path='/dashboard' element={company ? <Dashboard /> : <Navigate to='/'/>} />
