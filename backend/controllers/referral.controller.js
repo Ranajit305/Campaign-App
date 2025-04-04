@@ -7,7 +7,7 @@ import validator from 'validator';
 import 'dotenv/config'
 import { askAI } from '../utils/aiAgent.js';
 
-const CLIENT_URL = process.env.CLIENT_URL;
+const CLIENT_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:5173' : '/';
 
 export const getReferrals = async (req, res) => {
     try {
