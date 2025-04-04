@@ -5,7 +5,7 @@ import Referral from '../models/referral.model.js';
 import nodemailer from 'nodemailer';
 import 'dotenv/config'
 
-const CLIENT_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:5173' : '/';
+const CLIENT_URL = process.env.CLIENT_URL;
 
 export const createCampaign = async (req, res) => {
     try {
