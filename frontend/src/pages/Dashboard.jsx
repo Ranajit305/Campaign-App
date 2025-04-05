@@ -30,6 +30,10 @@ const Dashboard = () => {
     return (
         <div className="p-4 mx-auto sm:p-6 md:w-[70%]">
             <div className='mt-20'>
+                <h1 className="text-center text-3xl mb-6 font-semibold text-indigo-800">
+                    Welcome <span className="italic text-indigo-600">{company.name}</span>
+                    <div className="mt-1.5 h-0.5 w-16 mx-auto bg-indigo-200 rounded-full" />
+                </h1>
                 <h1 className="text-xl sm:text-2xl font-bold text-indigo-600 mb-4 sm:mb-6">Dashboard Overview</h1>
 
                 {/* Stats Cards - Stack on mobile, grid on larger screens */}

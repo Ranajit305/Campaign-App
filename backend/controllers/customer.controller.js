@@ -1,7 +1,61 @@
 import Customer from '../models/customer.model.js';
 import Company from '../models/company.model.js';
 import nodemailer from 'nodemailer';
+import validator from 'validator';
 import 'dotenv/config'
+
+export const addSingleCustomer = async (req, res) => {
+    try {
+        const { name, email, referrals } = req.body;
+        const company = req.company;
+
+        if (!name || !email) {
+            return res.status(400).json({
+                success: false,
+                message: 'Name and email are required fields'
+            });
+        }
+
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({success: false, message: 'Invalid Email'})
+        }
+
+        const newCustomer = await Customer.create({
+            name,
+            email: email,
+            totalReferrals: Number(referrals) || 0,
+            company: company._id,
+            status: 'old'
+        });
+
+        await Company.findByIdAndUpdate(
+            company._id,
+            {
+                $inc: {
+                    totalCustomers: 1,
+                    totalReferrals: newCustomer.totalReferrals
+                }
+            },
+            { new: true }
+        );
+
+        res.status(201).json({
+            success: true,
+            newCustomer,
+            message: 'Customer added successfully'
+        });
+
+    } catch (error) {
+        if (error.code === 11000) {
+            return res.status(400).json({
+                success: false,
+                message: 'Customer already exists'
+            });
+        }
+
+        res.status(500).json({success: false, message: error.message})
+    }
+};
 
 export const addCustomers = async (req, res) => {
     try {
@@ -11,7 +65,7 @@ export const addCustomers = async (req, res) => {
         // 1. Validate and normalize input data
         const validatedCustomers = customers.map(customer => ({
             name: customer.name,
-            email: customer.email.toLowerCase().trim(),
+            email: customer.email,
             totalReferrals: Number(customer.totalReferrals) || 0,
             company: company._id,
             status: 'old',

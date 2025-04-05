@@ -32,6 +32,20 @@ const useCustomerStore = create((set) => ({
         }
     },
 
+    addSingleCustomer: async (name, email, referrals) => {
+        try {
+            const response = await axiosUrl.post('/customer/single', {name, email, referrals});
+            if (response.data.success) {
+                set((state) => ({
+                    customers: [...state.customers, response.data.newCustomer]
+                }))
+            }
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.log(error);
+        }
+    },
+
     addCustomers: async (customersCSV) => {
         try {
             // Convert CSV to JSON
