@@ -38,14 +38,14 @@ const useCustomerStore = create((set) => ({
                 .split('\n') // Split by lines
                 .filter(line => line.trim() !== '') // Remove empty lines
                 .map((line, index) => {
-                    if (index === 0 && line.toLowerCase().includes('name,email')) {
+                    if (index === 0 && line.toLowerCase().includes('name,email,referrals')) {
                         return null;
                     }
-                    const [name, email, totalReferrals] = line.split(',').map(item => item.trim());
+                    const [name, email, referrals] = line.split(',').map(item => item.trim());
                     return {
                         name,
                         email,
-                        totalReferrals: parseInt(totalReferrals) || 0,
+                        totalReferrals: parseInt(referrals) || 0,
                     };
                 })
                 .filter(customer => customer !== null); 
