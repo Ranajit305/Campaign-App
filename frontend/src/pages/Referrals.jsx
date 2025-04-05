@@ -35,7 +35,6 @@ const Referrals = () => {
     useEffect(() => {
         getReferrals();
     }, []);
-    console.log(referrals)
 
     return (
         <div className="p-4 sm:p-6 md:w-[70%] mx-auto">

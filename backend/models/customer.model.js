@@ -8,7 +8,7 @@ const customerSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true, 
+        unique: false,
     },
     company: {
         type: mongoose.Schema.Types.ObjectId,

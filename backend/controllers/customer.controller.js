@@ -6,38 +6,64 @@ import 'dotenv/config'
 export const addCustomers = async (req, res) => {
     try {
         const { customers } = req.body;
-
-        if (!customers || !Array.isArray(customers)) {
-            return res.status(400).json({ message: 'Invalid input. Provide an array of customers.' });
-        }
         const company = req.company;
-        const addedCustomers = customers.map((customer) => ({
-            ...customer,
+
+        // 1. Validate and normalize input data
+        const validatedCustomers = customers.map(customer => ({
+            name: customer.name,
+            email: customer.email.toLowerCase().trim(),
+            totalReferrals: Number(customer.totalReferrals) || 0,
             company: company._id,
-            status: 'old'
+            status: 'old',
         }));
 
+        // // 2. Find existing emails for this company
+        const existingEmails = await Customer.find({
+            company: company._id,
+            email: { $in: validatedCustomers.map(c => c.email) }
+        }).distinct('email');
+
+        // // 3. Filter out duplicates
+        const customersToAdd = validatedCustomers.filter(
+            c => !existingEmails.includes(c.email)
+        );
+
+        if (customersToAdd.length === 0) {
+            return res.status(400).json({
+                success: true,
+                message: 'Customers already exists'
+            });
+        }
+
+        const totalReferralsAdded = customersToAdd.reduce(
+            (sum, c) => sum + c.totalReferrals, 0
+        );
+
         await Promise.all([
-            Customer.insertMany(addedCustomers),
+            Customer.insertMany(customersToAdd),
             Company.findByIdAndUpdate(
                 company._id,
                 {
                     $inc: {
-                        totalCustomers: addedCustomers.length,
-                        totalReferrals: addedCustomers.reduce((sum, customer) => sum + (customer.totalReferrals || 0), 0)
+                        totalCustomers: customersToAdd.length,
+                        totalReferrals: totalReferralsAdded
                     }
                 },
                 { new: true }
             )
         ]);
 
-        const finalCustomers = addedCustomers.map(customer => ({
+        const finalCustomers = customersToAdd.map(customer => ({
             ...customer,
             createdAt: new Date().toISOString()
         }));
-        res.status(201).json({ success: true, finalCustomers, message: 'Customers added successfully' });
+        res.status(200).json({ success: true, finalCustomers });
+
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Failed to add customers', error: error.message });
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 };
 

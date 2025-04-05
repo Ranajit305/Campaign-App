@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { axiosUrl } from '../utils/axios';
+import toast from 'react-hot-toast';
 
 const useCustomerStore = create((set) => ({
     customers: [],
@@ -57,7 +58,7 @@ const useCustomerStore = create((set) => ({
                 }))
             }
         } catch (error) {
-            console.log(error.message)
+            toast.error(error.response.data.message);
             console.error(error.response.data.message);
         }
     },
