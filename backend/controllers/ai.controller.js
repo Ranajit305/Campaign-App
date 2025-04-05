@@ -67,7 +67,7 @@ export const generateMessage = async (req, res) => {
 // Campaign
 const createCampaign = async (userMessage, res) => {
     try {
-        const actionWords = ['create', 'creating', 'make', 'making', 'new', 'start', 'starting', 'launch', 'launching', 'begin', 'initiate', 'set up', 'setting up'];
+        const actionWords = ['create', 'setup', 'creating', 'make', 'making', 'new', 'start', 'starting', 'launch', 'launching', 'begin', 'initiate', 'set up', 'setting up'];
         const campaignWords = ['campaign', 'campagin', 'promo', 'promotion'];
 
         const hasActionWord = actionWords.some(word => userMessage.includes(word));
